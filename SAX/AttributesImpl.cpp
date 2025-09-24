@@ -66,6 +66,26 @@ int AttributesImpl::getIndex(const XMLString& qname) const
     return -1;
 }
 
+int AttributesImpl::getIndex(const XMLString& namespaceURI, const XMLString& localName) const
+{
+    int i = 0;
+    AttributeVec::const_iterator it;
+    for (it = _attributes.begin(); it != _attributes.end(); ++it)
+    {
+        if (it->namespaceURI == namespaceURI && it->localName == localName)
+            return i;
+        ++i;
+    }
+    return -1;
+}
+
+void AttributesImpl::setValue(int i, const XMLString& value)
+{
+    poco_assert (0 <= i && i < static_cast<int>(_attributes.size()));
+    _attributes[i].value = value;
+    _attributes[i].specified = true;
+}
+
 
 
 }
