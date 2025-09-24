@@ -86,6 +86,51 @@ void AttributesImpl::setValue(int i, const XMLString& value)
     _attributes[i].specified = true;
 }
 
+void AttributesImpl::setValue(const XMLString& qname, const XMLString& value)
+{
+    Attribute* pAttr = find(qname);
+    if (pAttr)
+    {
+        pAttr->value = value;
+        pAttr->specified = true;
+    }
+}
+
+void AttributesImpl::setValue(const XMLString& namespaceURI, const XMLString& localName, const XMLString& value)
+{
+    Attribute* pAttr = find(namespaceURI, localName);
+    if (pAttr)
+    {
+        pAttr->value = value;
+        pAttr->specified = true;
+    }
+}
+
+void AttributesImpl::setAttributes(const Attributes& attributes)
+{
+    if (&attributes != this)
+    {
+        int count = attributes.getLength();
+        _attributes.clear();
+        _attributes.reserve(count);
+        for (int i = 0; i < count; i++)
+        {
+            addAttribute(attributes.getURI(i), attributes.getLocalName(i),attributes.getQName(i), attributes.getType(i), attributes.getValue(i));
+        }
+    }
+}
+
+void AttributesImpl::setAttribute(int i, const XMLString& namespaceURI, const XMLString& localName, const XMLString& qname, const XMLString& type, const XMLString& value)
+{
+    poco_assert (0 <= i && i < static_cast<int>(_attributes.size()));
+    _attributes[i].namespaceURI = namespaceURI;
+    _attributes[i].localName = localName;
+    _attributes[i].qname = qname;
+    _attributes[i].type = type;
+    _attributes[i].value = value;
+    _attributes[i].specified = true;
+}
+
 
 
 }
